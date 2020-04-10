@@ -5,144 +5,263 @@ import java.io.InputStreamReader;
 
 import org.json.JSONObject;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
+
 public class DataCreatorController {
 	int companyId;
-	
+	@FXML
+	public TextArea resultWindow;
+
 	public void siteAdminUserCreator() {
 		System.out.println("siteAdminUserCreator method starts");
 		companyId = getCompanyId();
+
+		// test();
+		int adminUserCount = 1;
+		String newAdminUserName = "siteadmin";
+		int adminUserId = getAdminUserId(companyId);
+		String siteName = "Guest";
+		getGroupIdForSite(companyId, siteName);
+		String siteAdminRoleName = "Site Administrator";
+		getRoleIdOfSiteAdminRole(companyId, siteAdminRoleName);
+
 		
-//		test();
-		int userCount = 1;
-		String newUserName = "siteadmin";
-		int adminUserId = getAdminUserId();
-		System.out.println("adminUserId: "+adminUserId);
-//		createUser(companyId, adminUserId,
-//				newUserName, userCount);
+		
+		// createUser(companyId, adminUserId,
+		// newUserName, userCount);
 	}
 
-	private int getAdminUserId() {
+	private int getRoleIdOfSiteAdminRole(int inputCompanyId, String siteAdminRoleName) {
+		int roleId = 0;
+		String roleIdJsonString = "";
+		Runtime rt = Runtime.getRuntime();
+		Process p1;
+		Process p2;
+		StringBuilder output = new StringBuilder();
+		try {
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/role/get-role", "-u",
+					"test@liferay.com:test", "-d", "companyId=" + inputCompanyId, "-d", "name=" + siteAdminRoleName };
+
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			// ps.redirectErrorStream(true);
+			Process pr = ps.start();
+			pr.waitFor();
+
+			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
+			BufferedReader reader = new BufferedReader(isReader);
+			StringBuffer sb = new StringBuffer();
+			String str;
+			while ((str = reader.readLine()) != null) {
+				sb.append(str);
+			}
+			roleIdJsonString = sb.toString();
+
+			JSONObject jsonObject = new JSONObject(roleIdJsonString);
+
+			// System.out.println(jsonObject.toString());
+
+			p1 = Runtime.getRuntime().exec("pwd");
+			p1.waitFor();
+			roleId = Integer.parseInt((String) jsonObject.get("roleId"));
+			// BufferedReader reader1a
+			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
+			//
+			// String line1a = "";
+			// while ((line1a = reader1a.readLine()) != null) {
+			// output.append(line1a + "\n");
+			// System.out.println("output====" + output + "===");
+			// }
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+
+		System.out.println("roleId: " + roleId);
+		resultWindow.appendText("roleId: " + roleId + "\n");
+		return roleId;
+	}
+
+	private int getGroupIdForSite(int inputCompanyId, String siteName) {
+		int groupId = 0;
+		String groupJsonString = "";
+		Runtime rt = Runtime.getRuntime();
+		Process p1;
+		Process p2;
+		StringBuilder output = new StringBuilder();
+		try {
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/group/get-group", "-u",
+					"test@liferay.com:test", "-d", "companyId=" + inputCompanyId, "-d", "groupKey=" + siteName };
+
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			// ps.redirectErrorStream(true);
+			Process pr = ps.start();
+			pr.waitFor();
+
+			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
+			BufferedReader reader = new BufferedReader(isReader);
+			StringBuffer sb = new StringBuffer();
+			String str;
+			while ((str = reader.readLine()) != null) {
+				sb.append(str);
+			}
+			groupJsonString = sb.toString();
+
+			// curl
+			// http://localhost:8080/api/jsonws/user/get-user-id-by-email-address
+			// \
+			// -u test@liferay.com:test \
+			// -d companyId=20101 \
+			// -d emailAddress=test@liferay.com
+
+			JSONObject jsonObject = new JSONObject(groupJsonString);
+
+			// System.out.println(jsonObject.toString());
+
+			p1 = Runtime.getRuntime().exec("pwd");
+			p1.waitFor();
+			groupId = Integer.parseInt((String) jsonObject.get("groupId"));
+			// BufferedReader reader1a
+			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
+			//
+			// String line1a = "";
+			// while ((line1a = reader1a.readLine()) != null) {
+			// output.append(line1a + "\n");
+			// System.out.println("output====" + output + "===");
+			// }
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+
+		System.out.println("groupId: " + groupId);
+		resultWindow.appendText("groupId: " + groupId + "\n");
+		return groupId;
+
+	}
+
+	private int getAdminUserId(int inputCompanyId) {
 		int adminUserId = 0;
-        Runtime rt = Runtime.getRuntime();
-        Process p1;
-        Process p2;
+		Runtime rt = Runtime.getRuntime();
+		Process p1;
+		Process p2;
 		StringBuilder output = new StringBuilder();
 		String adminIdString = "";
 		try {
-            String[] stringPost = {"curl", "http://localhost:8080/api/jsonws/user/get-user-id-by-email-address",
-                "-u", "test@liferay.com:test",
-                "-d", "companyId=20101",
-                "-d", "emailAddress=test@liferay.com"
-            };
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/get-user-id-by-email-address", "-u",
+					"test@liferay.com:test", "-d", "companyId=" + inputCompanyId, "-d",
+					"emailAddress=test@liferay.com" };
 
-            ProcessBuilder ps = new ProcessBuilder(stringPost);
-            //ps.redirectErrorStream(true);
-            Process pr = ps.start();
-            pr.waitFor();
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			// ps.redirectErrorStream(true);
+			Process pr = ps.start();
+			pr.waitFor();
 
-            InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
-            BufferedReader reader = new BufferedReader(isReader);
-            StringBuffer sb = new StringBuffer();
-            String str;
-            while((str = reader.readLine())!= null){
-               sb.append(str);
-            }
-            adminIdString = sb.toString();
+			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
+			BufferedReader reader = new BufferedReader(isReader);
+			StringBuffer sb = new StringBuffer();
+			String str;
+			while ((str = reader.readLine()) != null) {
+				sb.append(str);
+			}
+			adminIdString = sb.toString();
 
-		// curl http://localhost:8080/api/jsonws/user/get-user-id-by-email-address \
-//		  -u test@liferay.com:test \
-//		  -d companyId=20101 \
-//		  -d emailAddress=test@liferay.com
-        } catch (Exception e) {
-            System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
-        }
-        adminUserId = Integer.parseInt(adminIdString.substring(1, adminIdString.length()-1));
+			// curl
+			// http://localhost:8080/api/jsonws/user/get-user-id-by-email-address
+			// \
+			// -u test@liferay.com:test \
+			// -d companyId=20101 \
+			// -d emailAddress=test@liferay.com
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+		adminUserId = Integer.parseInt(adminIdString.substring(1, adminIdString.length() - 1));
+		System.out.println("adminUserId: " + adminUserId);
+		resultWindow.appendText("adminUserId: " + adminUserId + "\n");
 		return adminUserId;
 	}
 
 	private void createUser(int companyId2, int adminUserId, String newUserName, int userCount) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void siteMemberUserCreator() {
 		System.out.println("siteMemberUserCreator method starts");
 	}
-	
+
 	public void basicWebContentCreator() {
 		System.out.println("basicWebContentCreator method starts");
 	}
-	
+
 	public void plainStructureCreator() {
 		System.out.println("plainStructureCreator method starts");
 	}
-	
+
 	public void fileCreator() {
 		System.out.println("fileCreator method starts");
 	}
-	
+
 	public void categoryCreator() {
 		System.out.println("categoryCreator method starts");
 	}
-	
+
 	public void formCreator() {
 		System.out.println("formCreator method starts");
 	}
-	
+
 	public void deleteNonAdminUsers() {
 		System.out.println("deleteNonAdminUsers method starts");
-		
+
 		System.out.println(getCompanyId());
-//		deleteNonAdminUsersForCompany(companyId);
+		// deleteNonAdminUsersForCompany(companyId);
 	}
 
 	private int getCompanyId() {
-        Runtime rt = Runtime.getRuntime();
-        Process p1;
-        Process p2;
+		Runtime rt = Runtime.getRuntime();
+		Process p1;
+		Process p2;
 		StringBuilder output = new StringBuilder();
-        try {
-            String[] stringPost = {"curl", "http://localhost:8080/api/jsonws/company/get-companies",
-                "-u", "test@liferay.com:test"
-            };
+		try {
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/company/get-companies", "-u",
+					"test@liferay.com:test" };
 
-            ProcessBuilder ps = new ProcessBuilder(stringPost);
-            //ps.redirectErrorStream(true);
-            Process pr = ps.start();
-            pr.waitFor();
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			// ps.redirectErrorStream(true);
+			Process pr = ps.start();
+			pr.waitFor();
 
-            BufferedReader reader2 = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+			BufferedReader reader2 = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 
-            String line2 = "";
-            while ((line2 = reader2.readLine()) != null) {
-                output.append(line2 + "\n");
-            }
+			String line2 = "";
+			while ((line2 = reader2.readLine()) != null) {
+				output.append(line2 + "\n");
+			}
 
-//            System.out.println("\n\n\noutput1====" + output + "===\n\n\n");
+			// System.out.println("\n\n\noutput1====" + output + "===\n\n\n");
 
-            String sbToStringOrig = output.toString();
-            String sbToString = sbToStringOrig.substring(1, sbToStringOrig.length()-1);
+			String sbToStringOrig = output.toString();
+			String sbToString = sbToStringOrig.substring(1, sbToStringOrig.length() - 1);
 
-            JSONObject jsonObject = new JSONObject(sbToString);
+			JSONObject jsonObject = new JSONObject(sbToString);
 
-//            System.out.println(jsonObject.toString());
+			// System.out.println(jsonObject.toString());
 
-            p1 = Runtime.getRuntime().exec("pwd");
-            p1.waitFor();
-            companyId = Integer.parseInt((String) jsonObject.get("companyId"));
-//            BufferedReader reader1a
-//                    = new BufferedReader(new InputStreamReader(p1.getInputStream()));
-//
-//            String line1a = "";
-//            while ((line1a = reader1a.readLine()) != null) {
-//                output.append(line1a + "\n");
-//                System.out.println("output====" + output + "===");
-//            }
-        } catch (Exception e) {
-            System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
-        }
+			p1 = Runtime.getRuntime().exec("pwd");
+			p1.waitFor();
+			companyId = Integer.parseInt((String) jsonObject.get("companyId"));
+			// BufferedReader reader1a
+			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
+			//
+			// String line1a = "";
+			// while ((line1a = reader1a.readLine()) != null) {
+			// output.append(line1a + "\n");
+			// System.out.println("output====" + output + "===");
+			// }
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+		resultWindow.appendText("companyId: " + companyId + "\n");
 		return companyId;
 
 	}
-	
+
 }
