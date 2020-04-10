@@ -22,14 +22,19 @@ public class DataCreatorController {
 		String newAdminUserName = "siteadmin";
 		int adminUserId = getAdminUserId(companyId);
 		String siteName = "Guest";
-		getGroupIdForSite(companyId, siteName);
+		int groupId = getGroupIdForSite(companyId, siteName);
 		String siteAdminRoleName = "Site Administrator";
-		getRoleIdOfSiteAdminRole(companyId, siteAdminRoleName);
+		int roleId = getRoleIdOfSiteAdminRole(companyId, siteAdminRoleName);
 
-		
-		
-		// createUser(companyId, adminUserId,
-		// newUserName, userCount);
+		//TODO:
+		// assign id numbers to the spinners and username fields, so we can reference them here
+		// retrieve the spinner and username values
+		// create the createUser method below
+		// create the applySiteAdminRole method below
+			
+//		createUser(companyId, adminUserId, newUserName, userCount);
+//		applySiteAdminRole(userId, groupId, roleId);
+
 	}
 
 	private int getRoleIdOfSiteAdminRole(int inputCompanyId, String siteAdminRoleName) {
