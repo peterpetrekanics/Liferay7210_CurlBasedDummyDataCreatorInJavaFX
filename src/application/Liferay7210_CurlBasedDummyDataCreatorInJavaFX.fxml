@@ -30,13 +30,13 @@
          <children>
             <Button mnemonicParsing="false" onAction="#siteAdminUserCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Button mnemonicParsing="false" onAction="#siteMemberUserCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="1" editable="true" min="0.0" max="500.0" initialValue="0.0" amountToStepBy="1.0"/>
+            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="2" editable="true" min="0.0" max="500.0" initialValue="0.0" amountToStepBy="1.0"/>
+            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="3" editable="true" min="0.0" max="500.0" initialValue="0.0" amountToStepBy="1.0"/>
+            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="4" editable="true" min="0.0" max="500.0" initialValue="0.0" amountToStepBy="1.0"/>
+            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="5" editable="true" min="0.0" max="500.0" initialValue="0.0" amountToStepBy="1.0"/>
+            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="6" editable="true" min="0.0" max="500.0" initialValue="0.0" amountToStepBy="1.0"/>
+            <Spinner GridPane.columnIndex="1" GridPane.rowIndex="7" editable="true" min="0.0" max="500.0" initialValue="0.0" amountToStepBy="1.0"/>
             <Button mnemonicParsing="false" onAction="#basicWebContentCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Button mnemonicParsing="false" onAction="#plainStructureCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Button mnemonicParsing="false" onAction="#fileCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="5" />
