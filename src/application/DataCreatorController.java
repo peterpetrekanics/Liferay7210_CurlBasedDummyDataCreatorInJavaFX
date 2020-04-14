@@ -6,39 +6,46 @@ import java.io.InputStreamReader;
 import org.json.JSONObject;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
+import java.net.Socket;
 
 public class DataCreatorController {
 	int companyId;
 	@FXML
 	public TextArea resultWindow;
+	public Spinner<Integer> siteAdminCount;
+//	public Spinner<Double> siteMemberCount;
 
 	public void siteAdminUserCreator() {
 		System.out.println("siteAdminUserCreator method starts");
 		companyId = getCompanyId();
 
-		// test();
-		int adminUserCount = 1;
+//		int adminUserCount = 1;
 		String newAdminUserName = "siteadmin";
 		int adminUserId = getAdminUserId(companyId);
 		String siteName = "Guest";
 		int groupId = getGroupIdForSite(companyId, siteName);
 		String siteAdminRoleName = "Site Administrator";
-		int roleId = getRoleIdOfSiteAdminRole(companyId, siteAdminRoleName);
+		int siteAdminRoleId = getRoleIdOfSiteAdminRole(companyId, siteAdminRoleName);
 
 		//TODO:
 		// assign id numbers to the spinners and username fields, so we can reference them here
 		// retrieve the spinner and username values
 		// create the createUser method below
-		// create the applySiteAdminRole method below
-			
-//		createUser(companyId, adminUserId, newUserName, userCount);
-//		applySiteAdminRole(userId, groupId, roleId);
 
+		String newUserName = "";
+//		userCount = Double.parseDouble(siteAdminCount.getValue());
+		int userCount = siteAdminCount.getValue();
+
+		createUser(companyId, adminUserId, newUserName, userCount, siteAdminRoleId);
+//		System.out.println(userCount);
 	}
 
+	
+
 	private int getRoleIdOfSiteAdminRole(int inputCompanyId, String siteAdminRoleName) {
-		int roleId = 0;
+		int siteAdminRoleId = 0;
 		String roleIdJsonString = "";
 		Runtime rt = Runtime.getRuntime();
 		Process p1;
@@ -68,7 +75,7 @@ public class DataCreatorController {
 
 			p1 = Runtime.getRuntime().exec("pwd");
 			p1.waitFor();
-			roleId = Integer.parseInt((String) jsonObject.get("roleId"));
+			siteAdminRoleId = Integer.parseInt((String) jsonObject.get("roleId"));
 			// BufferedReader reader1a
 			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
 			//
@@ -81,9 +88,9 @@ public class DataCreatorController {
 			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 		}
 
-		System.out.println("roleId: " + roleId);
-		resultWindow.appendText("roleId: " + roleId + "\n");
-		return roleId;
+		System.out.println("siteAdminRoleId: " + siteAdminRoleId);
+		resultWindow.appendText("siteAdminRoleId: " + siteAdminRoleId + "\n");
+		return siteAdminRoleId;
 	}
 
 	private int getGroupIdForSite(int inputCompanyId, String siteName) {
@@ -184,9 +191,8 @@ public class DataCreatorController {
 		return adminUserId;
 	}
 
-	private void createUser(int companyId2, int adminUserId, String newUserName, int userCount) {
-		// TODO Auto-generated method stub
-
+	private void createUser(int companyId2, int adminUserId, String newUserName, int userCount, int siteAdminRoleId) {
+		
 	}
 
 	public void siteMemberUserCreator() {

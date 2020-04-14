@@ -35,13 +35,13 @@
          <children>
             <Button mnemonicParsing="false" onAction="#siteAdminUserCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Button mnemonicParsing="false" onAction="#siteMemberUserCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Spinner fx:id="siteAdminCount" amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="26.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Spinner fx:id="siteMemberCount" amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="26.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="26.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="26.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="26.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="26.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="26.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Button mnemonicParsing="false" onAction="#basicWebContentCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Button mnemonicParsing="false" onAction="#plainStructureCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Button mnemonicParsing="false" onAction="#fileCreator" text="Create" GridPane.columnIndex="2" GridPane.rowIndex="5" />
