@@ -149,9 +149,10 @@ public class DataCreatorController {
 		StringBuilder output = new StringBuilder();
 		String adminIdString = "";
 		try {
-			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/get-user-id-by-email-address", "-u",
-					"test@liferay.com:test", "-d", "companyId=" + inputCompanyId, "-d",
-					"emailAddress=test@liferay.com" };
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/get-user-id-by-email-address",
+					"-u","test@liferay.com:test",
+					"-d", "companyId=" + inputCompanyId,
+					"-d","emailAddress=test@liferay.com" };
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
 			Process pr = ps.start();
@@ -261,6 +262,12 @@ public class DataCreatorController {
 
 		String siteName = "Guest";
 		int companyId = getCompanyId();
+		int companyUsersCount = 0;
+		companyUsersCount = getCompanyUsersCount(companyId);
+		System.out.println("companyUsersCount"+companyUsersCount);
+		if (companyUsersCount < 2) return;
+
+		// This code part will only run if the portal has more than one user
 		int groupId = getGroupIdForSite(companyId, siteName);
 		
 		long[] nonAdminUserIds = getUserIdsForLiferaydefaultSite(companyId, groupId);
@@ -275,6 +282,38 @@ public class DataCreatorController {
 		
 		// deleteNonAdminUsersForCompany(companyId);
 	}
+
+	private int getCompanyUsersCount(int companyId) {
+		int companyUsersCount = 0;
+		Runtime rt = Runtime.getRuntime();
+		StringBuilder output = new StringBuilder();
+		try {
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/get-company-users-count",
+					"-u","test@liferay.com:test",
+					"-d", "companyId=" + companyId
+					};
+
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			Process pr = ps.start();
+			pr.waitFor();
+
+			BufferedReader reader2 = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+
+			String line2 = "";
+			while ((line2 = reader2.readLine()) != null) {
+				output.append(line2);
+			}
+
+			String sbToStringOrig = output.toString();
+			companyUsersCount = Integer.parseInt((String) sbToStringOrig);
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+		resultWindow.appendText("companyUsersCount: " + companyUsersCount + "\n");
+		return companyUsersCount;
+	}
+
+
 
 	private long[] getUserIdsForLiferaydefaultSite(int companyId, int groupId) {
 		long[] nonAdminUserIds = null;
@@ -312,42 +351,37 @@ public class DataCreatorController {
 		}
 //		nonAdminUserIds = Integer.parseInt(userIdsForLiferaydefaultSiteString.substring(1, userIdsForLiferaydefaultSiteString.length() - 1));
 		nonAdminUserIdsString = userIdsForLiferaydefaultSiteString.substring(1, userIdsForLiferaydefaultSiteString.length() - 1);
-		if(nonAdminUserIdsString.length()<6){
-			System.out.println("nonAdminUserIdsString"+nonAdminUserIdsString);
-			nonAdminUserIds = new long[] {1};
-		} else {
-			int adminUserId = getAdminUserId(companyId);
-			nonAdminUserIdsString = removeAdminIdfromUserIdString(nonAdminUserIdsString, adminUserId);
-			String[] nonAdminUserIdsStringArray = "nonAdminUserIdsString".split(",");
-			nonAdminUserIds = convertStringArrayToLongArray(nonAdminUserIdsStringArray);
+		
+		
+		int adminUserId = getAdminUserId(companyId);
+		nonAdminUserIdsString = removeAdminIdfromUserIdString(nonAdminUserIdsString, adminUserId);
+		System.out.println("+nonAdminUserIdsString: " + nonAdminUserIdsString);
+		String[] nonAdminUserIdsStringArray = nonAdminUserIdsString.split(",");
+		nonAdminUserIds = convertStringArrayToLongArray(nonAdminUserIdsStringArray);
 
-			resultWindow.appendText("nonAdminUserIdsString: " + nonAdminUserIdsString + "\n");
-		}
+		resultWindow.appendText("nonAdminUserIdsString: " + nonAdminUserIdsString + "\n");
+		
 		return nonAdminUserIds;
 	}
 
 	private long[] convertStringArrayToLongArray(String[] numbersString) {
 		long[] result = null;
-		if(numbersString.length<2){
-			result = new long[] {1};
-		} else {
+		
+		System.out.println("numbersString.length: "+numbersString.length);
 		result = new long[numbersString.length];
-		for (int i = 0; i < numbersString.length; i++)
-			result[i] = Long.parseLong(numbersString[i]);
+		for (int i = 0; i < numbersString.length; i++){
+			result[i] = Integer.parseInt(numbersString[i]);
 		}
 		return result;
 		}
 
-
-
 	private String removeAdminIdfromUserIdString(String nonAdminUserIdsString, int adminUserId) {
 		String adminUserIdString = adminUserId + "";
-		String new_string = adminUserIdString.replace(adminUserIdString, "");
+		String new_string = nonAdminUserIdsString.replace(adminUserIdString + ",", "");
+//		String new_string_without_commas = new_string.replace(",", "");
 		nonAdminUserIdsString = new_string;
 		return nonAdminUserIdsString;
 	}
-
-
 
 	private int getCompanyId() {
 		int companyId = 0;
