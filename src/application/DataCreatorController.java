@@ -276,12 +276,32 @@ public class DataCreatorController {
 		for (i = 0; i < nonAdminUserIds.length; i++) { 
 			  
             // accessing each element of array 
-            long x = nonAdminUserIds[i]; 
-            System.out.print("nonAdminUserIds: "+x + " "); 
+            long actualNonAdminUserId = nonAdminUserIds[i]; 
+//            System.out.print("nonAdminUserIds: "+x + " "); 
+            deleteNonAdminUsersForCompany(actualNonAdminUserId);
         } 
-		
-		// deleteNonAdminUsersForCompany(companyId);
 	}
+
+	private void deleteNonAdminUsersForCompany(long actualNonAdminUserId) {
+		Runtime rt = Runtime.getRuntime();
+		StringBuilder output = new StringBuilder();
+		try {
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/delete-user",
+					"-u","test@liferay.com:test",
+					"-d", "userId=" + actualNonAdminUserId
+					};
+
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			Process pr = ps.start();
+			resultWindow.appendText("Non-admin user with the userId: " + actualNonAdminUserId + " deleted\n");
+			
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+		
+	}
+
+
 
 	private int getCompanyUsersCount(int companyId) {
 		int companyUsersCount = 0;
