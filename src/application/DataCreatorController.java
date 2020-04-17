@@ -11,7 +11,7 @@ import javafx.scene.control.TextArea;
 import java.net.Socket;
 
 public class DataCreatorController {
-	int companyId;
+//	int companyId;
 	@FXML
 	public TextArea resultWindow;
 	public Spinner<Integer> siteAdminCount;
@@ -19,6 +19,7 @@ public class DataCreatorController {
 
 	public void siteAdminUserCreator() {
 		System.out.println("siteAdminUserCreator method starts");
+		int companyId;
 		companyId = getCompanyId();
 
 //		int adminUserCount = 1;
@@ -191,8 +192,11 @@ public class DataCreatorController {
 		return adminUserId;
 	}
 
-	private void createUser(int companyId2, int adminUserId, String newUserName, int userCount, int siteAdminRoleId) {
-		
+	private void createUser(int companyId, int adminUserId, String newUserName, int userCount, int siteAdminRoleId) {
+		resultWindow.appendText("companyId: " + companyId + "\n");
+		resultWindow.appendText("adminUserId: " + adminUserId + "\n");
+		resultWindow.appendText("newUserName: " + newUserName + "\n");
+		resultWindow.appendText("userCount: " + userCount + "\n");
 	}
 
 	public void siteMemberUserCreator() {
@@ -227,6 +231,7 @@ public class DataCreatorController {
 	}
 
 	private int getCompanyId() {
+		int companyId = 0;
 		Runtime rt = Runtime.getRuntime();
 		Process p1;
 		Process p2;

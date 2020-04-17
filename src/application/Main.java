@@ -21,7 +21,7 @@ public class Main extends Application {
 			primaryStage.show();
 			if(!testIfLocalhost8080IsAvailable()) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setContentText("Alert Message");
+				alert.setContentText("Please check if localhost:8080 is available");
 				alert.show();
 			}
 		} catch (Exception e) {
