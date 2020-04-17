@@ -263,10 +263,16 @@ public class DataCreatorController {
 		int companyId = getCompanyId();
 		int groupId = getGroupIdForSite(companyId, siteName);
 		
-		
-		
 		long[] nonAdminUserIds = getUserIdsForLiferaydefaultSite(companyId, groupId);
-
+//		nonAdminUserIds
+		int i=0;
+		for (i = 0; i < nonAdminUserIds.length; i++) { 
+			  
+            // accessing each element of array 
+            long x = nonAdminUserIds[i]; 
+            System.out.print("nonAdminUserIds: "+x + " "); 
+        } 
+		
 		// deleteNonAdminUsersForCompany(companyId);
 	}
 
@@ -307,11 +313,9 @@ public class DataCreatorController {
 //		nonAdminUserIds = Integer.parseInt(userIdsForLiferaydefaultSiteString.substring(1, userIdsForLiferaydefaultSiteString.length() - 1));
 		nonAdminUserIdsString = userIdsForLiferaydefaultSiteString.substring(1, userIdsForLiferaydefaultSiteString.length() - 1);
 		if(nonAdminUserIdsString.length()<6){
-			System.out.println("1");
 			System.out.println("nonAdminUserIdsString"+nonAdminUserIdsString);
 			nonAdminUserIds = new long[] {1};
 		} else {
-			System.out.println("2");
 			int adminUserId = getAdminUserId(companyId);
 			nonAdminUserIdsString = removeAdminIdfromUserIdString(nonAdminUserIdsString, adminUserId);
 			String[] nonAdminUserIdsStringArray = "nonAdminUserIdsString".split(",");
@@ -319,7 +323,6 @@ public class DataCreatorController {
 
 			resultWindow.appendText("nonAdminUserIdsString: " + nonAdminUserIdsString + "\n");
 		}
-		System.out.println("nonAdminUserIds"+nonAdminUserIds);
 		return nonAdminUserIds;
 	}
 
