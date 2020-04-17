@@ -200,6 +200,57 @@ public class DataCreatorController {
 		resultWindow.appendText("adminUserId: " + adminUserId + "\n");
 		resultWindow.appendText("newUserName: " + newUserName + "\n");
 		resultWindow.appendText("userCount: " + userCount + "\n");
+		
+		
+		Runtime rt = Runtime.getRuntime();
+		Process p1;
+		Process p2;
+		StringBuilder output = new StringBuilder();
+		try {
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/role/get-role",
+				"-u", "test@liferay.com:test",
+				"-d", "companyId=" + companyId,
+				"-d", "autoPassword=true",
+				"-d", "password1=''",
+				"-d", "password2=''",
+				"-d", "autoScreenName=true",
+				"-d", "screenName=''",
+				"-d", "emailAddress=''",
+				"-d", "facebookId=",
+				"-d", "openId=''",
+				"-d", "locale=",
+				"-d", "firstName=''",
+				"-d", "middleName=''",
+				"-d", "lastName=''",
+				"-d", "prefixId=",
+				"-d", "suffixId=",
+				"-d", "male=true",
+				"-d", "birthdayMonth=",
+				"-d", "birthdayDay=",
+				"-d", "birthdayYear=",
+				"-d", "jobTitle=''",
+				"-d", "groupIds=",
+				"-d", "organizationIds=",
+				"-d", "roleIds=",
+				"-d", "userGroupIds=",
+				"-d", "sendEmail=true"
+
+			};
+
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			// ps.redirectErrorStream(true);
+			Process pr = ps.start();
+			pr.waitFor();
+
+
+			p1 = Runtime.getRuntime().exec("pwd");
+			p1.waitFor();
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+
+		resultWindow.appendText("User creation process finished\n");
+		
 	}
 
 	public void siteMemberUserCreator() {
