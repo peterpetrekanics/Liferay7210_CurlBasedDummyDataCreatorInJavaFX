@@ -57,11 +57,11 @@
                   <Insets left="70.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Create Site Admin user with username and password: siteadmin" GridPane.rowIndex="1">
+            <Label text="Create Site Admin users. Username=siteadmin+nr; password= siteadmin" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="15.0" />
                </GridPane.margin></Label>
-            <Label text="Create Site Member user with username and password: sitemember" GridPane.rowIndex="2">
+            <Label text="Create Site Member users. Username=sitemember+nr; password= sitemember" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="15.0" />
                </GridPane.margin></Label>
