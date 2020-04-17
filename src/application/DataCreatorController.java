@@ -48,8 +48,6 @@ public class DataCreatorController {
 		int siteAdminRoleId = 0;
 		String roleIdJsonString = "";
 		Runtime rt = Runtime.getRuntime();
-		Process p1;
-		Process p2;
 		StringBuilder output = new StringBuilder();
 		try {
 			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/role/get-role",
@@ -59,9 +57,7 @@ public class DataCreatorController {
 				};
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
-			// ps.redirectErrorStream(true);
 			Process pr = ps.start();
-			pr.waitFor();
 
 			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
 			BufferedReader reader = new BufferedReader(isReader);
@@ -76,8 +72,6 @@ public class DataCreatorController {
 
 			// System.out.println(jsonObject.toString());
 
-			p1 = Runtime.getRuntime().exec("pwd");
-			p1.waitFor();
 			siteAdminRoleId = Integer.parseInt((String) jsonObject.get("roleId"));
 			// BufferedReader reader1a
 			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
@@ -100,8 +94,6 @@ public class DataCreatorController {
 		int groupId = 0;
 		String groupJsonString = "";
 		Runtime rt = Runtime.getRuntime();
-		Process p1;
-		Process p2;
 		StringBuilder output = new StringBuilder();
 		try {
 			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/group/get-group", "-u",
@@ -132,8 +124,6 @@ public class DataCreatorController {
 
 			// System.out.println(jsonObject.toString());
 
-			p1 = Runtime.getRuntime().exec("pwd");
-			p1.waitFor();
 			groupId = Integer.parseInt((String) jsonObject.get("groupId"));
 			// BufferedReader reader1a
 			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
@@ -156,8 +146,6 @@ public class DataCreatorController {
 	private int getAdminUserId(int inputCompanyId) {
 		int adminUserId = 0;
 		Runtime rt = Runtime.getRuntime();
-		Process p1;
-		Process p2;
 		StringBuilder output = new StringBuilder();
 		String adminIdString = "";
 		try {
@@ -166,9 +154,7 @@ public class DataCreatorController {
 					"emailAddress=test@liferay.com" };
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
-			// ps.redirectErrorStream(true);
 			Process pr = ps.start();
-			pr.waitFor();
 
 			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
 			BufferedReader reader = new BufferedReader(isReader);
@@ -195,55 +181,51 @@ public class DataCreatorController {
 	}
 
 	private void createUser(int companyId, String newUserName, int userCount, int groupId, int siteAdminRoleId) {
+		if(userCount<1) return;
 		resultWindow.appendText("companyId: " + companyId + "\n");
 		resultWindow.appendText("newUserName: " + newUserName + "\n");
 		resultWindow.appendText("userCount: " + userCount + "\n");
 		
-		
-		Runtime rt = Runtime.getRuntime();
-		Process p1;
-		Process p2;
-		StringBuilder output = new StringBuilder();
-		try {
-			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/add-user",
-				"-u", "test@liferay.com:test",
-				"-d", "companyId=" + companyId,
-				"-d", "autoPassword=false",
-				"-d", "password1='" + newUserName + "'",
-				"-d", "password2='" + newUserName + "'",
-				"-d", "autoScreenName=true",
-				"-d", "screenName='" + newUserName + "'",
-				"-d", "emailAddress=" + newUserName + "@liferay.com",
-				"-d", "facebookId=0",
-				"-d", "openId=''",
-				"-d", "locale=",
-				"-d", "firstName='"+ newUserName + userCount +"'",
-				"-d", "middleName=''",
-				"-d", "lastName='"+ newUserName + userCount +"'",
-				"-d", "prefixId=0",
-				"-d", "suffixId=0",
-				"-d", "male=true",
-				"-d", "birthdayMonth=1",
-				"-d", "birthdayDay=1",
-				"-d", "birthdayYear=1970",
-				"-d", "jobTitle=''",
-				"-d", "groupIds=[" + groupId + "]",
-				"-d", "organizationIds=",
-				"-d", "roleIds=[" + siteAdminRoleId + "]",
-				"-d", "userGroupIds=",
-				"-d", "sendEmail=false"
-			};
-
-			ProcessBuilder ps = new ProcessBuilder(stringPost);
-			// ps.redirectErrorStream(true);
-			Process pr = ps.start();
-			pr.waitFor();
-
-
-			p1 = Runtime.getRuntime().exec("pwd");
-			p1.waitFor();
-		} catch (Exception e) {
-			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		for(int i=1; i<userCount+1; i++){
+			resultWindow.appendText("i: " + i + "\n");
+			Runtime rt = null;
+			rt = Runtime.getRuntime();
+			StringBuilder output = new StringBuilder();
+			try {
+				String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/add-user",
+					"-u", "test@liferay.com:test",
+					"-d", "companyId=" + companyId,
+					"-d", "autoPassword=false",
+					"-d", "password1='" + newUserName + i + "'",
+					"-d", "password2='" + newUserName + i +  "'",
+					"-d", "autoScreenName=true",
+					"-d", "screenName='" + newUserName + i +  "'",
+					"-d", "emailAddress=" + newUserName +  i + "@liferay.com",
+					"-d", "facebookId=0",
+					"-d", "openId=''",
+					"-d", "locale=",
+					"-d", "firstName='"+ newUserName +  i + "'",
+					"-d", "middleName=''",
+					"-d", "lastName='"+ newUserName +  i + "'",
+					"-d", "prefixId=0",
+					"-d", "suffixId=0",
+					"-d", "male=true",
+					"-d", "birthdayMonth=1",
+					"-d", "birthdayDay=1",
+					"-d", "birthdayYear=1970",
+					"-d", "jobTitle=''",
+					"-d", "groupIds=[" + groupId + "]",
+					"-d", "organizationIds=",
+					"-d", "roleIds=[" + siteAdminRoleId + "]",
+					"-d", "userGroupIds=",
+					"-d", "sendEmail=false"
+				};
+	
+				ProcessBuilder ps = new ProcessBuilder(stringPost);
+				Process pr = ps.start();
+			} catch (Exception e) {
+				System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+			}
 		}
 
 		resultWindow.appendText("User creation process finished\n");
@@ -277,22 +259,102 @@ public class DataCreatorController {
 	public void deleteNonAdminUsers() {
 		System.out.println("deleteNonAdminUsers method starts");
 
-		System.out.println(getCompanyId());
+		String siteName = "Guest";
+		int companyId = getCompanyId();
+		int groupId = getGroupIdForSite(companyId, siteName);
+		
+		
+		
+		long[] nonAdminUserIds = getUserIdsForLiferaydefaultSite(companyId, groupId);
+
 		// deleteNonAdminUsersForCompany(companyId);
 	}
+
+	private long[] getUserIdsForLiferaydefaultSite(int companyId, int groupId) {
+		long[] nonAdminUserIds = null;
+		String userIdsForLiferaydefaultSiteString = "";
+		String nonAdminUserIdsString = "";
+		Runtime rt = Runtime.getRuntime();
+		StringBuilder output = new StringBuilder();
+		try {
+			String[] stringPost = {
+					"curl", "http://localhost:8080/api/jsonws/user/get-group-user-ids",
+					"-u", "test@liferay.com:test",
+					"-d", "groupId=" + groupId
+					};
+
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			Process pr = ps.start();
+
+			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
+			BufferedReader reader = new BufferedReader(isReader);
+			StringBuffer sb = new StringBuffer();
+			String str;
+			while ((str = reader.readLine()) != null) {
+				sb.append(str);
+			}
+			userIdsForLiferaydefaultSiteString = sb.toString();
+
+			// curl
+			// http://localhost:8080/api/jsonws/user/get-user-id-by-email-address
+			// \
+			// -u test@liferay.com:test \
+			// -d companyId=20101 \
+			// -d emailAddress=test@liferay.com
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+//		nonAdminUserIds = Integer.parseInt(userIdsForLiferaydefaultSiteString.substring(1, userIdsForLiferaydefaultSiteString.length() - 1));
+		nonAdminUserIdsString = userIdsForLiferaydefaultSiteString.substring(1, userIdsForLiferaydefaultSiteString.length() - 1);
+		if(nonAdminUserIdsString.length()<6){
+			System.out.println("1");
+			System.out.println("nonAdminUserIdsString"+nonAdminUserIdsString);
+			nonAdminUserIds = new long[] {1};
+		} else {
+			System.out.println("2");
+			int adminUserId = getAdminUserId(companyId);
+			nonAdminUserIdsString = removeAdminIdfromUserIdString(nonAdminUserIdsString, adminUserId);
+			String[] nonAdminUserIdsStringArray = "nonAdminUserIdsString".split(",");
+			nonAdminUserIds = convertStringArrayToLongArray(nonAdminUserIdsStringArray);
+
+			resultWindow.appendText("nonAdminUserIdsString: " + nonAdminUserIdsString + "\n");
+		}
+		System.out.println("nonAdminUserIds"+nonAdminUserIds);
+		return nonAdminUserIds;
+	}
+
+	private long[] convertStringArrayToLongArray(String[] numbersString) {
+		long[] result = null;
+		if(numbersString.length<2){
+			result = new long[] {1};
+		} else {
+		result = new long[numbersString.length];
+		for (int i = 0; i < numbersString.length; i++)
+			result[i] = Long.parseLong(numbersString[i]);
+		}
+		return result;
+		}
+
+
+
+	private String removeAdminIdfromUserIdString(String nonAdminUserIdsString, int adminUserId) {
+		String adminUserIdString = adminUserId + "";
+		String new_string = adminUserIdString.replace(adminUserIdString, "");
+		nonAdminUserIdsString = new_string;
+		return nonAdminUserIdsString;
+	}
+
+
 
 	private int getCompanyId() {
 		int companyId = 0;
 		Runtime rt = Runtime.getRuntime();
-		Process p1;
-		Process p2;
 		StringBuilder output = new StringBuilder();
 		try {
 			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/company/get-companies", "-u",
 					"test@liferay.com:test" };
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
-			// ps.redirectErrorStream(true);
 			Process pr = ps.start();
 			pr.waitFor();
 
@@ -312,8 +374,6 @@ public class DataCreatorController {
 
 			// System.out.println(jsonObject.toString());
 
-			p1 = Runtime.getRuntime().exec("pwd");
-			p1.waitFor();
 			companyId = Integer.parseInt((String) jsonObject.get("companyId"));
 			// BufferedReader reader1a
 			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
