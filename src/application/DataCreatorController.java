@@ -35,11 +35,10 @@ public class DataCreatorController {
 		// retrieve the spinner and username values
 		// create the createUser method below
 
-		String newUserName = "";
 //		userCount = Double.parseDouble(siteAdminCount.getValue());
 		int userCount = siteAdminCount.getValue();
 
-		createUser(companyId, adminUserId, newUserName, userCount, siteAdminRoleId);
+		createUser(companyId, newAdminUserName, userCount, groupId, siteAdminRoleId);
 //		System.out.println(userCount);
 	}
 
@@ -195,9 +194,8 @@ public class DataCreatorController {
 		return adminUserId;
 	}
 
-	private void createUser(int companyId, int adminUserId, String newUserName, int userCount, int siteAdminRoleId) {
+	private void createUser(int companyId, String newUserName, int userCount, int groupId, int siteAdminRoleId) {
 		resultWindow.appendText("companyId: " + companyId + "\n");
-		resultWindow.appendText("adminUserId: " + adminUserId + "\n");
 		resultWindow.appendText("newUserName: " + newUserName + "\n");
 		resultWindow.appendText("userCount: " + userCount + "\n");
 		
@@ -207,34 +205,33 @@ public class DataCreatorController {
 		Process p2;
 		StringBuilder output = new StringBuilder();
 		try {
-			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/role/get-role",
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/add-user",
 				"-u", "test@liferay.com:test",
 				"-d", "companyId=" + companyId,
-				"-d", "autoPassword=true",
-				"-d", "password1=''",
-				"-d", "password2=''",
+				"-d", "autoPassword=false",
+				"-d", "password1='" + newUserName + "'",
+				"-d", "password2='" + newUserName + "'",
 				"-d", "autoScreenName=true",
-				"-d", "screenName=''",
-				"-d", "emailAddress=''",
-				"-d", "facebookId=",
+				"-d", "screenName='" + newUserName + "'",
+				"-d", "emailAddress=" + newUserName + "@liferay.com",
+				"-d", "facebookId=0",
 				"-d", "openId=''",
 				"-d", "locale=",
-				"-d", "firstName=''",
+				"-d", "firstName='"+ newUserName + userCount +"'",
 				"-d", "middleName=''",
-				"-d", "lastName=''",
-				"-d", "prefixId=",
-				"-d", "suffixId=",
+				"-d", "lastName='"+ newUserName + userCount +"'",
+				"-d", "prefixId=0",
+				"-d", "suffixId=0",
 				"-d", "male=true",
-				"-d", "birthdayMonth=",
-				"-d", "birthdayDay=",
-				"-d", "birthdayYear=",
+				"-d", "birthdayMonth=1",
+				"-d", "birthdayDay=1",
+				"-d", "birthdayYear=1970",
 				"-d", "jobTitle=''",
-				"-d", "groupIds=",
+				"-d", "groupIds=[" + groupId + "]",
 				"-d", "organizationIds=",
-				"-d", "roleIds=",
+				"-d", "roleIds=[" + siteAdminRoleId + "]",
 				"-d", "userGroupIds=",
-				"-d", "sendEmail=true"
-
+				"-d", "sendEmail=false"
 			};
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
