@@ -53,8 +53,11 @@ public class DataCreatorController {
 		Process p2;
 		StringBuilder output = new StringBuilder();
 		try {
-			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/role/get-role", "-u",
-					"test@liferay.com:test", "-d", "companyId=" + inputCompanyId, "-d", "name=" + siteAdminRoleName };
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/role/get-role",
+				"-u", "test@liferay.com:test",
+				"-d", "companyId=" + inputCompanyId,
+				"-d", "name=" + siteAdminRoleName
+				};
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
 			// ps.redirectErrorStream(true);
