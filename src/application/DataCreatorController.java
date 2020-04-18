@@ -15,37 +15,45 @@ public class DataCreatorController {
 	@FXML
 	public TextArea resultWindow;
 	public Spinner<Integer> siteAdminCount;
-//	public Spinner<Double> siteMemberCount;
+	public Spinner<Integer> siteMemberCount;
 
 	public void siteAdminUserCreator() {
 		System.out.println("siteAdminUserCreator method starts");
 		int companyId;
 		companyId = getCompanyId();
 
-//		int adminUserCount = 1;
 		String newAdminUserName = "siteadmin";
-		int adminUserId = getAdminUserId(companyId);
+		String userEmailAddress = newAdminUserName + "@liferay.com";
 		String siteName = "Guest";
 		int groupId = getGroupIdForSite(companyId, siteName);
 		String siteAdminRoleName = "Site Administrator";
-		int siteAdminRoleId = getRoleIdOfSiteAdminRole(companyId, siteAdminRoleName);
-
-		//TODO:
-		// assign id numbers to the spinners and username fields, so we can reference them here
-		// retrieve the spinner and username values
-		// create the createUser method below
-
-//		userCount = Double.parseDouble(siteAdminCount.getValue());
+		int siteAdminRoleId = getRoleIdOfSiteRole(companyId, siteAdminRoleName);
 		int userCount = siteAdminCount.getValue();
+//		long currentUserId = 0;
+		long currentUserId = 0;
+		int regularAdminRoleId = 0;  // <- value = 0 because we do not need this for the current method
 
-		createUser(companyId, newAdminUserName, userCount, groupId, siteAdminRoleId);
-//		System.out.println(userCount);
+		currentUserId = createUser(companyId, newAdminUserName, userCount, groupId, regularAdminRoleId);
+//		assignSiteRole(currentUserId, groupId, siteAdminRoleId);
 	}
 
-	
+	public void siteMemberUserCreator() {
+//		System.out.println("siteMemberUserCreator method starts");
+//		int companyId;
+//		companyId = getCompanyId();
+//
+//		String newAdminUserName = "sitemember";
+//		String siteName = "Guest";
+//		int groupId = getGroupIdForSite(companyId, siteName);
+//		String siteAdminRoleName = "Site Administrator";
+//		int siteAdminRoleId = getRoleIdOfSiteRole(companyId, siteAdminRoleName);
+//		int userCount = siteAdminCount.getValue();
+//
+//		createUser(companyId, newAdminUserName, userCount, groupId, siteAdminRoleId);
+	}
 
-	private int getRoleIdOfSiteAdminRole(int inputCompanyId, String siteAdminRoleName) {
-		int siteAdminRoleId = 0;
+	private int getRoleIdOfSiteRole(int inputCompanyId, String siteRoleName) {
+		int siteRoleId = 0;
 		String roleIdJsonString = "";
 		Runtime rt = Runtime.getRuntime();
 		StringBuilder output = new StringBuilder();
@@ -53,7 +61,7 @@ public class DataCreatorController {
 			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/role/get-role",
 				"-u", "test@liferay.com:test",
 				"-d", "companyId=" + inputCompanyId,
-				"-d", "name=" + siteAdminRoleName
+				"-d", "name=" + siteRoleName
 				};
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
@@ -70,24 +78,14 @@ public class DataCreatorController {
 
 			JSONObject jsonObject = new JSONObject(roleIdJsonString);
 
-			// System.out.println(jsonObject.toString());
-
-			siteAdminRoleId = Integer.parseInt((String) jsonObject.get("roleId"));
-			// BufferedReader reader1a
-			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
-			//
-			// String line1a = "";
-			// while ((line1a = reader1a.readLine()) != null) {
-			// output.append(line1a + "\n");
-			// System.out.println("output====" + output + "===");
-			// }
+			siteRoleId = Integer.parseInt((String) jsonObject.get("roleId"));
 		} catch (Exception e) {
 			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 		}
 
-		System.out.println("siteAdminRoleId: " + siteAdminRoleId);
-		resultWindow.appendText("siteAdminRoleId: " + siteAdminRoleId + "\n");
-		return siteAdminRoleId;
+		System.out.println("siteAdminRoleId: " + siteRoleId);
+		resultWindow.appendText("siteAdminRoleId: " + siteRoleId + "\n");
+		return siteRoleId;
 	}
 
 	private int getGroupIdForSite(int inputCompanyId, String siteName) {
@@ -113,26 +111,9 @@ public class DataCreatorController {
 			}
 			groupJsonString = sb.toString();
 
-			// curl
-			// http://localhost:8080/api/jsonws/user/get-user-id-by-email-address
-			// \
-			// -u test@liferay.com:test \
-			// -d companyId=20101 \
-			// -d emailAddress=test@liferay.com
-
 			JSONObject jsonObject = new JSONObject(groupJsonString);
 
-			// System.out.println(jsonObject.toString());
-
 			groupId = Integer.parseInt((String) jsonObject.get("groupId"));
-			// BufferedReader reader1a
-			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
-			//
-			// String line1a = "";
-			// while ((line1a = reader1a.readLine()) != null) {
-			// output.append(line1a + "\n");
-			// System.out.println("output====" + output + "===");
-			// }
 		} catch (Exception e) {
 			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 		}
@@ -140,7 +121,6 @@ public class DataCreatorController {
 		System.out.println("groupId: " + groupId);
 		resultWindow.appendText("groupId: " + groupId + "\n");
 		return groupId;
-
 	}
 
 	private int getAdminUserId(int inputCompanyId) {
@@ -165,13 +145,6 @@ public class DataCreatorController {
 				sb.append(str);
 			}
 			adminIdString = sb.toString();
-
-			// curl
-			// http://localhost:8080/api/jsonws/user/get-user-id-by-email-address
-			// \
-			// -u test@liferay.com:test \
-			// -d companyId=20101 \
-			// -d emailAddress=test@liferay.com
 		} catch (Exception e) {
 			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 		}
@@ -181,8 +154,9 @@ public class DataCreatorController {
 		return adminUserId;
 	}
 
-	private void createUser(int companyId, String newUserName, int userCount, int groupId, int siteAdminRoleId) {
-		if(userCount<1) return;
+	private long createUser(int companyId, String newUserName, int userCount, int groupId, int regularRoleId) {
+		if(userCount<1) return 0;
+		long currentUserId = 0;
 		resultWindow.appendText("companyId: " + companyId + "\n");
 		resultWindow.appendText("newUserName: " + newUserName + "\n");
 		resultWindow.appendText("userCount: " + userCount + "\n");
@@ -191,7 +165,6 @@ public class DataCreatorController {
 			resultWindow.appendText("i: " + i + "\n");
 			Runtime rt = null;
 			rt = Runtime.getRuntime();
-			StringBuilder output = new StringBuilder();
 			try {
 				String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/add-user",
 					"-u", "test@liferay.com:test",
@@ -217,7 +190,8 @@ public class DataCreatorController {
 					"-d", "jobTitle=",
 					"-d", "groupIds=[" + groupId + "]",
 					"-d", "organizationIds=",
-					"-d", "roleIds=[" + siteAdminRoleId + "]",
+//					"-d", "roleIds=[" + siteAdminRoleId + "]",  // <- this is only applicable for Regular Roles
+					"-d", "roleIds=",
 					"-d", "userGroupIds=",
 					"-d", "sendEmail=false"
 				};
@@ -228,13 +202,8 @@ public class DataCreatorController {
 				System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 			}
 		}
-
 		resultWindow.appendText("User creation process finished\n");
-		
-	}
-
-	public void siteMemberUserCreator() {
-		System.out.println("siteMemberUserCreator method starts");
+		return currentUserId;
 	}
 
 	public void basicWebContentCreator() {
@@ -359,19 +328,10 @@ public class DataCreatorController {
 				sb.append(str);
 			}
 			userIdsForLiferaydefaultSiteString = sb.toString();
-
-			// curl
-			// http://localhost:8080/api/jsonws/user/get-user-id-by-email-address
-			// \
-			// -u test@liferay.com:test \
-			// -d companyId=20101 \
-			// -d emailAddress=test@liferay.com
 		} catch (Exception e) {
 			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 		}
-//		nonAdminUserIds = Integer.parseInt(userIdsForLiferaydefaultSiteString.substring(1, userIdsForLiferaydefaultSiteString.length() - 1));
 		nonAdminUserIdsString = userIdsForLiferaydefaultSiteString.substring(1, userIdsForLiferaydefaultSiteString.length() - 1);
-		
 		
 		int adminUserId = getAdminUserId(companyId);
 		nonAdminUserIdsString = removeAdminIdfromUserIdString(nonAdminUserIdsString, adminUserId);
@@ -432,20 +392,10 @@ public class DataCreatorController {
 			// System.out.println(jsonObject.toString());
 
 			companyId = Integer.parseInt((String) jsonObject.get("companyId"));
-			// BufferedReader reader1a
-			// = new BufferedReader(new InputStreamReader(p1.getInputStream()));
-			//
-			// String line1a = "";
-			// while ((line1a = reader1a.readLine()) != null) {
-			// output.append(line1a + "\n");
-			// System.out.println("output====" + output + "===");
-			// }
 		} catch (Exception e) {
 			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 		}
 		resultWindow.appendText("companyId: " + companyId + "\n");
 		return companyId;
-
 	}
-
 }
