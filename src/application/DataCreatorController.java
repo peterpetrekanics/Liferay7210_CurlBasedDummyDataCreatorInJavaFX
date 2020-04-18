@@ -31,10 +31,8 @@ public class DataCreatorController {
 		int userCount = siteAdminCount.getValue();
 //		long currentUserId = 0;
 		long currentUserId = 0;
-		int regularAdminRoleId = 0;  // <- value = 0 because we do not need this for the current method
 
-		currentUserId = createUser(companyId, newAdminUserName, userCount, groupId, regularAdminRoleId);
-//		assignSiteRole(currentUserId, groupId, siteAdminRoleId);
+		currentUserId = createUser(companyId, newAdminUserName, userCount, groupId, siteAdminRoleId);
 	}
 
 	public void siteMemberUserCreator() {
@@ -154,8 +152,9 @@ public class DataCreatorController {
 		return adminUserId;
 	}
 
-	private long createUser(int companyId, String newUserName, int userCount, int groupId, int regularRoleId) {
+	private long createUser(int companyId, String newUserName, int userCount, int groupId, int siteRoleId) {
 		if(userCount<1) return 0;
+		String currentUserIdString = "";
 		long currentUserId = 0;
 		resultWindow.appendText("companyId: " + companyId + "\n");
 		resultWindow.appendText("newUserName: " + newUserName + "\n");
@@ -198,12 +197,50 @@ public class DataCreatorController {
 	
 				ProcessBuilder ps = new ProcessBuilder(stringPost);
 				Process pr = ps.start();
+				
+				InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
+				BufferedReader reader = new BufferedReader(isReader);
+				StringBuffer sb = new StringBuffer();
+				String str;
+				while ((str = reader.readLine()) != null) {
+					sb.append(str);
+				}
+				currentUserIdString = sb.toString();
+
+				JSONObject jsonObject = new JSONObject(currentUserIdString);
+
+				currentUserId = Integer.parseInt((String) jsonObject.get("userId"));				
 			} catch (Exception e) {
 				System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 			}
+			System.out.println("currentUserId: " + currentUserId);
+			resultWindow.appendText("currentUserId: " + currentUserId + "\n");
 		}
+
+		assignSiteRole(currentUserId, groupId, siteRoleId);
+		
 		resultWindow.appendText("User creation process finished\n");
 		return currentUserId;
+	}
+
+	private void assignSiteRole(long currentUserId, int groupId, int siteRoleId) {
+		Runtime rt = Runtime.getRuntime();
+		StringBuilder output = new StringBuilder();
+		try {
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/usergrouprole/add-user-group-roles",
+					"-u","test@liferay.com:test",
+					"-d", "userId=" + currentUserId,
+					"-d", "groupId=" + groupId,
+					"-d", "roleIds=" + siteRoleId
+					};
+
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			Process pr = ps.start();
+			resultWindow.appendText("Site role assigned to the user\n");
+			
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
 	}
 
 	public void basicWebContentCreator() {
@@ -267,10 +304,7 @@ public class DataCreatorController {
 		} catch (Exception e) {
 			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 		}
-		
 	}
-
-
 
 	private int getCompanyUsersCount(int companyId) {
 		int companyUsersCount = 0;
