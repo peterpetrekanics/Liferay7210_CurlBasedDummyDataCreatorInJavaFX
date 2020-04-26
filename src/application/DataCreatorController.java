@@ -18,7 +18,7 @@ public class DataCreatorController {
 	public Spinner<Integer> siteMemberCount;
 
 	public void siteAdminUserCreator() throws InterruptedException {
-		System.out.println("siteAdminUserCreator method starts");
+//		System.out.println("siteAdminUserCreator method starts");
 		int companyId;
 		companyId = getCompanyId();
 
@@ -31,11 +31,8 @@ public class DataCreatorController {
 		long currentUserId = 0;
 
 		if(userCount>1) {
-		
 			for(int i=1; i<userCount+1; i++){
-	
 				currentUserId = createUser(companyId, newAdminUserName, i, groupId, siteAdminRoleId);
-//				Thread.sleep(1000);
 				assignSiteRole(currentUserId, groupId, siteAdminRoleId);
 			}
 		}
@@ -43,17 +40,21 @@ public class DataCreatorController {
 
 	public void siteMemberUserCreator() {
 //		System.out.println("siteMemberUserCreator method starts");
-//		int companyId;
-//		companyId = getCompanyId();
-//
-//		String newAdminUserName = "sitemember";
-//		String siteName = "Guest";
-//		int groupId = getGroupIdForSite(companyId, siteName);
-//		String siteAdminRoleName = "Site Administrator";
-//		int siteAdminRoleId = getRoleIdOfSiteRole(companyId, siteAdminRoleName);
-//		int userCount = siteAdminCount.getValue();
-//
-//		createUser(companyId, newAdminUserName, userCount, groupId, siteAdminRoleId);
+		int companyId;
+		companyId = getCompanyId();
+
+		String newAdminUserName = "sitemember";
+		String siteName = "Guest";
+		int groupId = getGroupIdForSite(companyId, siteName);
+		int siteMemberRoleId = 0;
+		int userCount = siteMemberCount.getValue();
+		long currentUserId = 0;
+
+		if(userCount>1) {
+			for(int i=1; i<userCount+1; i++){
+				currentUserId = createUser(companyId, newAdminUserName, i, groupId, siteMemberRoleId);
+			}
+		}
 	}
 
 	private int getRoleIdOfSiteRole(int inputCompanyId, String siteRoleName) {
