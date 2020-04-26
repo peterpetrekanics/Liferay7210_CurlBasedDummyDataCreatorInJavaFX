@@ -17,22 +17,28 @@ public class DataCreatorController {
 	public Spinner<Integer> siteAdminCount;
 	public Spinner<Integer> siteMemberCount;
 
-	public void siteAdminUserCreator() {
+	public void siteAdminUserCreator() throws InterruptedException {
 		System.out.println("siteAdminUserCreator method starts");
 		int companyId;
 		companyId = getCompanyId();
 
 		String newAdminUserName = "siteadmin";
-		String userEmailAddress = newAdminUserName + "@liferay.com";
 		String siteName = "Guest";
 		int groupId = getGroupIdForSite(companyId, siteName);
 		String siteAdminRoleName = "Site Administrator";
 		int siteAdminRoleId = getRoleIdOfSiteRole(companyId, siteAdminRoleName);
 		int userCount = siteAdminCount.getValue();
-//		long currentUserId = 0;
 		long currentUserId = 0;
 
-		currentUserId = createUser(companyId, newAdminUserName, userCount, groupId, siteAdminRoleId);
+		if(userCount>1) {
+		
+			for(int i=1; i<userCount+1; i++){
+	
+				currentUserId = createUser(companyId, newAdminUserName, i, groupId, siteAdminRoleId);
+//				Thread.sleep(1000);
+				assignSiteRole(currentUserId, groupId, siteAdminRoleId);
+			}
+		}
 	}
 
 	public void siteMemberUserCreator() {
@@ -152,73 +158,68 @@ public class DataCreatorController {
 		return adminUserId;
 	}
 
-	private long createUser(int companyId, String newUserName, int userCount, int groupId, int siteRoleId) {
-		if(userCount<1) return 0;
+	private long createUser(int companyId, String newUserName, int userNumber, int groupId, int siteRoleId) {
 		String currentUserIdString = "";
 		long currentUserId = 0;
 		resultWindow.appendText("companyId: " + companyId + "\n");
 		resultWindow.appendText("newUserName: " + newUserName + "\n");
-		resultWindow.appendText("userCount: " + userCount + "\n");
-		
-		for(int i=1; i<userCount+1; i++){
-			resultWindow.appendText("i: " + i + "\n");
-			Runtime rt = null;
-			rt = Runtime.getRuntime();
-			try {
-				String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/add-user",
-					"-u", "test@liferay.com:test",
-					"-d", "companyId=" + companyId,
-					"-d", "autoPassword=false",
-					"-d", "password1=" + newUserName,
-					"-d", "password2=" + newUserName,
-					"-d", "autoScreenName=true",
-					"-d", "screenName=" + newUserName + i,
-					"-d", "emailAddress=" + newUserName + i + "@liferay.com",
-					"-d", "facebookId=0",
-					"-d", "openId=",
-					"-d", "locale=",
-					"-d", "firstName="+ newUserName + i,
-					"-d", "middleName=",
-					"-d", "lastName="+ newUserName + i,
-					"-d", "prefixId=0",
-					"-d", "suffixId=0",
-					"-d", "male=true",
-					"-d", "birthdayMonth=1",
-					"-d", "birthdayDay=1",
-					"-d", "birthdayYear=1970",
-					"-d", "jobTitle=",
-					"-d", "groupIds=[" + groupId + "]",
-					"-d", "organizationIds=",
+		resultWindow.appendText("userCount: " + userNumber + "\n");
+
+		Runtime rt = null;
+		rt = Runtime.getRuntime();
+		try {
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/user/add-user",
+				"-u", "test@liferay.com:test",
+				"-d", "companyId=" + companyId,
+				"-d", "autoPassword=false",
+				"-d", "password1=" + newUserName,
+				"-d", "password2=" + newUserName,
+				"-d", "autoScreenName=true",
+				"-d", "screenName=" + newUserName + userNumber,
+				"-d", "emailAddress=" + newUserName + userNumber + "@liferay.com",
+				"-d", "facebookId=0",
+				"-d", "openId=",
+				"-d", "locale=",
+				"-d", "firstName="+ newUserName + userNumber,
+				"-d", "middleName=",
+				"-d", "lastName="+ newUserName + userNumber,
+				"-d", "prefixId=0",
+				"-d", "suffixId=0",
+				"-d", "male=true",
+				"-d", "birthdayMonth=1",
+				"-d", "birthdayDay=1",
+				"-d", "birthdayYear=1970",
+				"-d", "jobTitle=",
+				"-d", "groupIds=[" + groupId + "]",
+				"-d", "organizationIds=",
 //					"-d", "roleIds=[" + siteAdminRoleId + "]",  // <- this is only applicable for Regular Roles
-					"-d", "roleIds=",
-					"-d", "userGroupIds=",
-					"-d", "sendEmail=false"
-				};
+				"-d", "roleIds=",
+				"-d", "userGroupIds=",
+				"-d", "sendEmail=false"
+			};
 	
-				ProcessBuilder ps = new ProcessBuilder(stringPost);
-				Process pr = ps.start();
-				
-				InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
-				BufferedReader reader = new BufferedReader(isReader);
-				StringBuffer sb = new StringBuffer();
-				String str;
-				while ((str = reader.readLine()) != null) {
-					sb.append(str);
-				}
-				currentUserIdString = sb.toString();
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			Process pr = ps.start();
 
-				JSONObject jsonObject = new JSONObject(currentUserIdString);
-
-				currentUserId = Integer.parseInt((String) jsonObject.get("userId"));				
-			} catch (Exception e) {
-				System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
+			BufferedReader reader = new BufferedReader(isReader);
+			StringBuffer sb = new StringBuffer();
+			String str;
+			while ((str = reader.readLine()) != null) {
+				sb.append(str);
 			}
-			System.out.println("currentUserId: " + currentUserId);
-			resultWindow.appendText("currentUserId: " + currentUserId + "\n");
-		}
+			currentUserIdString = sb.toString();
 
-		assignSiteRole(currentUserId, groupId, siteRoleId);
-		
+			JSONObject jsonObject = new JSONObject(currentUserIdString);
+
+			currentUserId = Integer.parseInt((String) jsonObject.get("userId"));
+
+		} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+		System.out.println("currentUserId: " + currentUserId);
+		resultWindow.appendText("currentUserId: " + currentUserId + "\n");
+
 		resultWindow.appendText("User creation process finished\n");
 		return currentUserId;
 	}
