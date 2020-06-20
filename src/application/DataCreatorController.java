@@ -16,6 +16,7 @@ public class DataCreatorController {
 	public TextArea resultWindow;
 	public Spinner<Integer> siteAdminCount;
 	public Spinner<Integer> siteMemberCount;
+	public Spinner<Integer> basicWebContentCount;
 
 	public void siteAdminUserCreator() throws InterruptedException {
 //		System.out.println("siteAdminUserCreator method starts");
@@ -256,7 +257,10 @@ public class DataCreatorController {
 	public void basicWebContentCreator() {
 		System.out.println("basicWebContentCreator method starts");
 
-		
+		int companyId;
+		companyId = getCompanyId();
+		int webcontentCount = basicWebContentCount.getValue();
+		System.out.println("webcontentCount: " + webcontentCount);
 	}
 
 	public void plainStructureCreator() {

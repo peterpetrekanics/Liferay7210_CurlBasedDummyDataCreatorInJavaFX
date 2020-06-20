@@ -41,13 +41,18 @@
         		<SpinnerValueFactory.IntegerSpinnerValueFactory max="100" min="0" />
       		</valueFactory>
       		</Spinner>
-            <Spinner fx:id="siteMemberCount" amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="30.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="2" >
+            <Spinner fx:id="siteMemberCount" amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="30.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <valueFactory>
         		<SpinnerValueFactory.IntegerSpinnerValueFactory max="100" min="0" />
       		</valueFactory>
       		</Spinner>
-            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="30.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="30.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Spinner fx:id="basicWebContentCount" amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="30.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="3" >
+            <valueFactory>
+        		<SpinnerValueFactory.IntegerSpinnerValueFactory max="100" min="0" />
+      		</valueFactory>
+            </Spinner>
+            
+      		<Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="30.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="30.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="30.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Spinner amountToStepBy="1.0" editable="true" initialValue="0.0" max="500.0" min="0.0" prefHeight="30.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
