@@ -88,8 +88,8 @@ public class DataCreatorController {
 			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
 		}
 
-		System.out.println("siteAdminRoleId: " + siteRoleId);
-		resultWindow.appendText("siteAdminRoleId: " + siteRoleId + "\n");
+		System.out.println("siteRoleId: " + siteRoleId);
+		resultWindow.appendText("siteRoleId: " + siteRoleId + "\n");
 		return siteRoleId;
 	}
 
@@ -99,8 +99,11 @@ public class DataCreatorController {
 		Runtime rt = Runtime.getRuntime();
 		StringBuilder output = new StringBuilder();
 		try {
-			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/group/get-group", "-u",
-					"test@liferay.com:test", "-d", "companyId=" + inputCompanyId, "-d", "groupKey=" + siteName };
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/group/get-group",
+					"-u", "test@liferay.com:test",
+					"-d", "companyId=" + inputCompanyId,
+					"-d", "groupKey=" + siteName
+					};
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
 			// ps.redirectErrorStream(true);
@@ -247,10 +250,14 @@ public class DataCreatorController {
 
 	public void basicWebContentCreator() {
 		System.out.println("basicWebContentCreator method starts");
+
+		
 	}
 
 	public void plainStructureCreator() {
 		System.out.println("plainStructureCreator method starts");
+
+		
 	}
 
 	public void fileCreator() {
