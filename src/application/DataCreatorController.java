@@ -259,8 +259,35 @@ public class DataCreatorController {
 
 		int companyId;
 		companyId = getCompanyId();
+		String siteName = "Guest";
+		int groupId = getGroupIdForSite(companyId, siteName);
 		int webcontentCount = basicWebContentCount.getValue();
-		System.out.println("webcontentCount: " + webcontentCount);
+		if(webcontentCount>=1) {
+			for(int i=1; i<webcontentCount+1; i++){
+				Runtime rt = Runtime.getRuntime();
+				StringBuilder output = new StringBuilder();
+				try {
+					String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/journal.journalarticle/add-article",
+							"-u","test@liferay.com:test",
+							"-d", "groupId=" + groupId,
+							"-d", "folderId=0",
+							"-d", "titleMap={\"en_US\":\"TitleSG" + i + "\"}",
+							"-d", "descriptionMap={\"en_US\":\"DescriptionSG" + i + "\"}",
+							"-d", "content=<root></root>",
+							"-d", "ddmStructureKey=BASIC-WEB-CONTENT",
+							"-d", "ddmTemplateKey=BASIC-WEB-CONTENT"
+							};
+
+					ProcessBuilder ps = new ProcessBuilder(stringPost);
+					Process pr = ps.start();
+					pr.waitFor();
+					resultWindow.appendText("New web content article(s) created");
+					
+				} catch (Exception e) {
+					System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+				}
+			}
+		}
 	}
 
 	public void plainStructureCreator() {
