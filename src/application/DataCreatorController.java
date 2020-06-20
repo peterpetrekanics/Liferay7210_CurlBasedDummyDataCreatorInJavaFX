@@ -17,6 +17,10 @@ public class DataCreatorController {
 	public Spinner<Integer> siteAdminCount;
 	public Spinner<Integer> siteMemberCount;
 	public Spinner<Integer> basicWebContentCount;
+	public Spinner<Integer> plainStructureAndTemplateCount;
+	public Spinner<Integer> dmFileCount;
+	public Spinner<Integer> categoryCount;
+	public Spinner<Integer> formCount;
 
 	public void siteAdminUserCreator() throws InterruptedException {
 //		System.out.println("siteAdminUserCreator method starts");
@@ -293,19 +297,29 @@ public class DataCreatorController {
 	public void plainStructureCreator() {
 		System.out.println("plainStructureCreator method starts");
 
-		
+		int plainStructureAndTplCount = plainStructureAndTemplateCount.getValue();
+		System.out.println("plainStructureAndTplCount: " + plainStructureAndTplCount);
 	}
 
 	public void fileCreator() {
 		System.out.println("fileCreator method starts");
+
+		int fileCount = dmFileCount.getValue();
+		System.out.println("fileCount: " + fileCount);
 	}
 
 	public void categoryCreator() {
 		System.out.println("categoryCreator method starts");
+
+		int categCount = categoryCount.getValue();
+		System.out.println("categCount: " + categCount);
 	}
 
 	public void formCreator() {
 		System.out.println("formCreator method starts");
+
+		int myFormCount = formCount.getValue();
+		System.out.println("myFormCount: " + myFormCount);
 	}
 
 	public void deleteNonAdminUsers() {
