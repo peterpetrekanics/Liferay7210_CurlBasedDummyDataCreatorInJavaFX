@@ -28,6 +28,7 @@ public class DataCreatorController {
 		String siteAdminRoleName = "Site Administrator";
 		int siteAdminRoleId = getRoleIdOfSiteRole(companyId, siteAdminRoleName);
 		int userCount = siteAdminCount.getValue();
+		System.out.println("userCount: " + userCount);
 		long currentUserId = 0;
 
 		if(userCount>1) {
@@ -71,6 +72,7 @@ public class DataCreatorController {
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
 			Process pr = ps.start();
+			pr.waitFor();
 
 			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
 			BufferedReader reader = new BufferedReader(isReader);
@@ -144,6 +146,7 @@ public class DataCreatorController {
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
 			Process pr = ps.start();
+			pr.waitFor();
 
 			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
 			BufferedReader reader = new BufferedReader(isReader);
@@ -204,6 +207,7 @@ public class DataCreatorController {
 	
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
 			Process pr = ps.start();
+			pr.waitFor();
 
 			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
 			BufferedReader reader = new BufferedReader(isReader);
@@ -241,6 +245,7 @@ public class DataCreatorController {
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
 			Process pr = ps.start();
+			pr.waitFor();
 			resultWindow.appendText("Site role assigned to the user\n");
 			
 		} catch (Exception e) {
@@ -308,6 +313,7 @@ public class DataCreatorController {
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
 			Process pr = ps.start();
+			pr.waitFor();
 			resultWindow.appendText("Non-admin user with the userId: " + actualNonAdminUserId + " deleted\n");
 			
 		} catch (Exception e) {
@@ -348,7 +354,7 @@ public class DataCreatorController {
 
 
 	private long[] getUserIdsForLiferaydefaultSite(int companyId, int groupId) {
-		long[] nonAdminUserIds = null;
+		long[] nonAdminUserIds = {};
 		String userIdsForLiferaydefaultSiteString = "";
 		String nonAdminUserIdsString = "";
 		Runtime rt = Runtime.getRuntime();
@@ -362,6 +368,7 @@ public class DataCreatorController {
 
 			ProcessBuilder ps = new ProcessBuilder(stringPost);
 			Process pr = ps.start();
+			pr.waitFor();
 
 			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
 			BufferedReader reader = new BufferedReader(isReader);
@@ -378,9 +385,13 @@ public class DataCreatorController {
 		
 		int adminUserId = getAdminUserId(companyId);
 		nonAdminUserIdsString = removeAdminIdfromUserIdString(nonAdminUserIdsString, adminUserId);
-		System.out.println("+nonAdminUserIdsString: " + nonAdminUserIdsString);
-		String[] nonAdminUserIdsStringArray = nonAdminUserIdsString.split(",");
-		nonAdminUserIds = convertStringArrayToLongArray(nonAdminUserIdsStringArray);
+		System.out.println("nonAdminUserIdsString: " + nonAdminUserIdsString);
+		if(nonAdminUserIdsString.contains(",")){
+			String[] nonAdminUserIdsStringArray = nonAdminUserIdsString.split(",");
+			nonAdminUserIds = convertStringArrayToLongArray(nonAdminUserIdsStringArray);
+		} else {
+			nonAdminUserIdsString = "";
+		}
 
 		resultWindow.appendText("nonAdminUserIdsString: " + nonAdminUserIdsString + "\n");
 		
