@@ -31,7 +31,7 @@ public class DataCreatorController {
 		System.out.println("userCount: " + userCount);
 		long currentUserId = 0;
 
-		if(userCount>1) {
+		if(userCount>=1) {
 			for(int i=1; i<userCount+1; i++){
 				currentUserId = createUser(companyId, newAdminUserName, i, groupId, siteAdminRoleId);
 				assignSiteRole(currentUserId, groupId, siteAdminRoleId);
@@ -51,7 +51,7 @@ public class DataCreatorController {
 		int userCount = siteMemberCount.getValue();
 		long currentUserId = 0;
 
-		if(userCount>1) {
+		if(userCount>=1) {
 			for(int i=1; i<userCount+1; i++){
 				currentUserId = createUser(companyId, newAdminUserName, i, groupId, siteMemberRoleId);
 			}
