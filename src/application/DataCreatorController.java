@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class DataCreatorController {
 //	int companyId;
@@ -305,7 +307,47 @@ public class DataCreatorController {
 		System.out.println("fileCreator method starts");
 
 		int fileCount = dmFileCount.getValue();
-		System.out.println("fileCount: " + fileCount);
+//		System.out.println("fileCount: " + fileCount);
+
+		int companyId;
+		companyId = getCompanyId();
+
+		String siteName = "Guest";
+		int groupId = getGroupIdForSite(companyId, siteName);
+
+		if(fileCount>=1) {
+			for(int i=1; i<fileCount+1; i++){
+				String textFileBaseContent = "This is the test text file" + fileCount;
+				byte[] textFileBytes = textFileBaseContent.getBytes(StandardCharsets.UTF_8);
+				String bytesString = Arrays.toString(textFileBytes);
+
+				Runtime rt = Runtime.getRuntime();
+				StringBuilder output = new StringBuilder();
+				try {
+					String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/dlapp/add-file-entry",
+							"-u","test@liferay.com:test",
+							"-d", "repositoryId=" + groupId,
+							"-d", "folderId=0",
+							"-d", "sourceFileName=textfile"+i+".txt",
+							"-d", "mimeType=",
+							"-d", "title=textfile"+i+".txt",
+							"-d", "description=",
+							"-d", "changeLog=",
+							"-d", "bytes=" + bytesString
+							};
+
+					ProcessBuilder ps = new ProcessBuilder(stringPost);
+					Process pr = ps.start();
+					pr.waitFor();
+					resultWindow.appendText("New web content article(s) created");
+					
+				} catch (Exception e) {
+					System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+				}
+			}
+		}
+
+		
 	}
 
 	public void categoryCreator() {
