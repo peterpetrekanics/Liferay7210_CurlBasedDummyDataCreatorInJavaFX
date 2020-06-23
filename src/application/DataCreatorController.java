@@ -317,7 +317,7 @@ public class DataCreatorController {
 
 		if(fileCount>=1) {
 			for(int i=1; i<fileCount+1; i++){
-				String textFileBaseContent = "This is the test text file" + fileCount;
+				String textFileBaseContent = "This is the test text file" + i;
 				byte[] textFileBytes = textFileBaseContent.getBytes(StandardCharsets.UTF_8);
 				String bytesString = Arrays.toString(textFileBytes);
 
@@ -355,6 +355,69 @@ public class DataCreatorController {
 
 		int categCount = categoryCount.getValue();
 		System.out.println("categCount: " + categCount);
+
+		int companyId;
+		companyId = getCompanyId();
+
+		String siteName = "Guest";
+		int groupId = getGroupIdForSite(companyId, siteName);
+
+		int vocabularyId = 0;
+		Runtime rt = Runtime.getRuntime();
+		StringBuilder output = new StringBuilder();
+		try {
+			String[] stringPost = { "curl", "http://localhost:8080/api/jsonws/assetvocabulary/add-vocabulary",
+					"-u","test@liferay.com:test",
+					"-d", "groupId=" + groupId,
+					"-d", "title=myvocabulary"
+					};
+
+			ProcessBuilder ps = new ProcessBuilder(stringPost);
+			Process pr = ps.start();
+			pr.waitFor();
+			
+			InputStreamReader isReader = new InputStreamReader(pr.getInputStream());
+			BufferedReader reader = new BufferedReader(isReader);
+			StringBuffer sb = new StringBuffer();
+			String str;
+			while ((str = reader.readLine()) != null) {
+				sb.append(str);
+			}
+			String vocabularyIdString = sb.toString();
+
+			JSONObject jsonObject = new JSONObject(vocabularyIdString);
+
+			vocabularyId = Integer.parseInt((String) jsonObject.get("vocabularyId"));
+
+			} catch (Exception e) {
+			System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+		}
+		resultWindow.appendText("A new vocabulary was created, with the vocabularyId: " + vocabularyId + "\n");
+
+
+		if(categCount>=1) {
+			for(int i=1; i<categCount+1; i++){
+
+				Runtime categrt = Runtime.getRuntime();
+				StringBuilder categOutput = new StringBuilder();
+				try {
+					String[] categStringPost = { "curl", "http://localhost:8080/api/jsonws/assetcategory/add-category",
+							"-u","test@liferay.com:test",
+							"-d", "groupId=" + groupId,
+							"-d", "title=mycategory" + i,
+							"-d", "vocabularyId=" + vocabularyId
+							};
+
+					ProcessBuilder categps = new ProcessBuilder(categStringPost);
+					Process categpr = categps.start();
+					categpr.waitFor();
+					resultWindow.appendText("New category instance(s) created");
+					
+				} catch (Exception e) {
+					System.out.println("===============ERROR===============\n" + e.getMessage() + "\n\n\n");
+				}
+			}
+		}
 	}
 
 	public void formCreator() {
