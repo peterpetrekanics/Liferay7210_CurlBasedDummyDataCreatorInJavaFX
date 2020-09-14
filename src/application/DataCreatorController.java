@@ -34,7 +34,8 @@ public class DataCreatorController {
 		int groupId = getGroupIdForSite(companyId, siteName);
 		String siteAdminRoleName = "Site Administrator";
 		int siteAdminRoleId = getRoleIdOfSiteRole(companyId, siteAdminRoleName);
-		int userCount = siteAdminCount.getValue();
+		int userCount = 0;
+		userCount = siteAdminCount.getValue();
 		System.out.println("userCount: " + userCount);
 		long currentUserId = 0;
 
@@ -55,7 +56,9 @@ public class DataCreatorController {
 		String siteName = "Guest";
 		int groupId = getGroupIdForSite(companyId, siteName);
 		int siteMemberRoleId = 0;
-		int userCount = siteMemberCount.getValue();
+		int userCount = 0;
+		userCount = siteMemberCount.getValue();
+		System.out.println("userCount: "+ userCount);
 		long currentUserId = 0;
 
 		if(userCount>=1) {
